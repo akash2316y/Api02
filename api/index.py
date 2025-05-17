@@ -33,3 +33,24 @@ def my_api():
 
 # For Vercel, we expose the 'app' variable
 app = app
+
+@app.route('/watch')
+def watch():
+    video_url = request.args.get('url')
+    if not video_url:
+        return "Missing 'url' parameter", 400
+
+    return f'''
+    <html>
+        <head>
+            <title>Watch Video</title>
+        </head>
+        <body style="text-align:center; font-family:sans-serif; background:#000; color:white;">
+            <h2>Now Watching</h2>
+            <video width="90%" height="auto" controls autoplay>
+                <source src="{video_url}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </body>
+    </html>
+    '''
