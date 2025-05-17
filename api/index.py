@@ -24,10 +24,16 @@ def my_api():
         return jsonify({"error": "Missing 'url' parameter"}), 400
 
     api_url = f"https://terabox.web.id/url?url={url}&token={token}"
-    
+
     try:
         r = requests.get(api_url)
-        return jsonify(r.json())
+        data = r.json()
+
+        # Generate watching link
+        if "direct_link" in data:
+            data["watch_link"] = f"https://{request.host}/watch?url={data['direct_link']}"
+
+        return jsonify(data)
     except Exception as e:
         return jsonify({"error": "Failed to fetch from source API", "details": str(e)}), 500
 
